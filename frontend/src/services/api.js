@@ -38,6 +38,16 @@ export const authAPI = {
   getProfile: async () => {
     const response = await api.get('/users/profile');
     return response.data;
+  },
+  
+  changePassword: async (currentPassword, newPassword) => {
+    const response = await api.put('/users/password', { currentPassword, newPassword });
+    return response.data;
+  },
+  
+  adminChangeUserPassword: async (userId, newPassword) => {
+    const response = await api.put(`/users/${userId}/password`, { newPassword });
+    return response.data;
   }
 };
 

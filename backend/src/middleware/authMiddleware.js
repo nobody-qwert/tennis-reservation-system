@@ -4,6 +4,7 @@ const db = require('../config/db');
 const protect = async (req, res, next) => {
   let token;
 
+  // Check if token exists in the Authorization header
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith('Bearer')
@@ -21,24 +22,34 @@ const protect = async (req, res, next) => {
         [decoded.id]
       );
 
+      // Check if user was found
+      if (!rows[0]) {
+        console.error('User not found for token');
+        return res.status(401).json({ message: 'User not found' });
+      }
+
+      // Set user in request object
       req.user = rows[0];
-      next();
+      
+      // Continue to the next middleware/route handler
+      return next();
     } catch (error) {
-      console.error(error);
-      res.status(401).json({ message: 'Not authorized, token failed' });
+      console.error('Token verification error:', error);
+      return res.status(401).json({ message: 'Not authorized, token failed' });
     }
   }
 
-  if (!token) {
-    res.status(401).json({ message: 'Not authorized, no token' });
-  }
+  // No token found
+  console.error('No token provided');
+  return res.status(401).json({ message: 'Not authorized, no token' });
 };
 
 const admin = (req, res, next) => {
   if (req.user && req.user.is_admin) {
-    next();
+    return next();
   } else {
-    res.status(401).json({ message: 'Not authorized as admin' });
+    console.error('Admin access denied for user:', req.user?.username);
+    return res.status(403).json({ message: 'Not authorized as admin' });
   }
 };
 

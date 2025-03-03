@@ -3,9 +3,11 @@ const router = express.Router();
 const { 
   registerUser, 
   loginUser, 
-  getUserProfile 
+  getUserProfile,
+  changePassword,
+  adminChangeUserPassword
 } = require('../controllers/userController');
-const { protect } = require('../middleware/authMiddleware');
+const { protect, admin } = require('../middleware/authMiddleware');
 const User = require('../models/userModel');
 const bcrypt = require('bcrypt');
 
@@ -17,6 +19,12 @@ router.post('/login', loginUser);
 
 // Get user profile
 router.get('/profile', protect, getUserProfile);
+
+// Change password (for own account)
+router.put('/password', protect, changePassword);
+
+// Admin change user password
+router.put('/:id/password', protect, admin, adminChangeUserPassword);
 
 // Special route to create admin user (should be removed in production)
 router.post('/setup-admin', async (req, res) => {

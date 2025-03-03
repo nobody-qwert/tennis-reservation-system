@@ -57,6 +57,7 @@ yarn-error.log*
 *~
 *.tmp
 .tmp/
+.git/
 
 # Docker
 docker-compose.override.yml
@@ -69,6 +70,7 @@ backend/uploads/
 uploads/
 temp/
 temp-frontend/
+node_modules
 
 # Certificate files
 *.pem

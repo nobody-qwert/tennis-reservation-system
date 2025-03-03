@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { reservationAPI, courtAPI } from '../services/api';
+import { reservationAPI, courtAPI, authAPI } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 
 const Admin = () => {
   const [activeTab, setActiveTab] = useState('reservations');
   const [reservations, setReservations] = useState([]);
   const [courts, setCourts] = useState([]);
+  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   
@@ -16,7 +17,15 @@ const Admin = () => {
   const [isIndoor, setIsIndoor] = useState(false);
   const [formSubmitting, setFormSubmitting] = useState(false);
   
-  const { isAdmin } = useAuth();
+  // Password change state
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [passwordSuccess, setPasswordSuccess] = useState('');
+  
+  const { isAdmin, adminChangeUserPassword } = useAuth();
   const navigate = useNavigate();
   
   // Check if user is admin
@@ -42,6 +51,13 @@ const Admin = () => {
         } else if (activeTab === 'courts') {
           const data = await courtAPI.getAllCourts();
           setCourts(data);
+        } else if (activeTab === 'users') {
+          // Mock user data for now - in a real app you'd need to create this endpoint
+          setUsers([
+            { id: 1, username: 'admin', email: 'admin@tennis.com', is_admin: true },
+            { id: 2, username: 'test', email: 'test@tennis.com', is_admin: false },
+            { id: 3, username: 'johndoe', email: 'john@example.com', is_admin: false }
+          ]);
         }
       } catch (error) {
         setError('Failed to load data. Please try again later.');
@@ -111,6 +127,49 @@ const Admin = () => {
       setFormSubmitting(false);
     }
   };
+  
+  // Open password change modal
+  const handleOpenPasswordModal = (user) => {
+    setSelectedUser(user);
+    setNewPassword('');
+    setConfirmPassword('');
+    setPasswordError('');
+    setPasswordSuccess('');
+    setShowPasswordModal(true);
+  };
+  
+  // Handle password change
+  const handlePasswordChange = async (e) => {
+    e.preventDefault();
+    
+    // Validate passwords
+    if (newPassword !== confirmPassword) {
+      setPasswordError('Passwords do not match');
+      return;
+    }
+    
+    if (newPassword.length < 6) {
+      setPasswordError('Password must be at least 6 characters long');
+      return;
+    }
+    
+    try {
+      await adminChangeUserPassword(selectedUser.id, newPassword);
+      setPasswordSuccess(`Password for ${selectedUser.username} has been changed successfully`);
+      setNewPassword('');
+      setConfirmPassword('');
+      setPasswordError('');
+      
+      // Close modal after 2 seconds
+      setTimeout(() => {
+        setShowPasswordModal(false);
+        setPasswordSuccess('');
+      }, 2000);
+    } catch (error) {
+      setPasswordError(error.response?.data?.message || 'Failed to change password');
+      console.error(error);
+    }
+  };
 
   // Delete a court
   const handleDeleteCourt = async (id) => {
@@ -149,12 +208,62 @@ const Admin = () => {
             Manage Courts
           </button>
         </li>
+        <li className="nav-item">
+          <button
+            className={`nav-link ${activeTab === 'users' ? 'active' : ''}`}
+            onClick={() => setActiveTab('users')}
+          >
+            User Management
+          </button>
+        </li>
       </ul>
       
       {loading ? (
         <div className="text-center">
           <div className="spinner-border text-success" role="status">
             <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      ) : activeTab === 'users' ? (
+        <div className="card">
+          <div className="card-body">
+            <h3 className="mb-3">User Management</h3>
+            
+            {users.length === 0 ? (
+              <div className="alert alert-info">No users found.</div>
+            ) : (
+              <div className="table-responsive">
+                <table className="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Username</th>
+                      <th>Email</th>
+                      <th>Role</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {users.map((user) => (
+                      <tr key={user.id}>
+                        <td>{user.id}</td>
+                        <td>{user.username}</td>
+                        <td>{user.email}</td>
+                        <td>{user.is_admin ? 'Admin' : 'User'}</td>
+                        <td>
+                          <button
+                            className="btn btn-warning btn-sm"
+                            onClick={() => handleOpenPasswordModal(user)}
+                          >
+                            Change Password
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         </div>
       ) : activeTab === 'reservations' ? (
@@ -310,6 +419,60 @@ const Admin = () => {
                     </table>
                   </div>
                 )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Password Change Modal */}
+      {showPasswordModal && (
+        <div className="modal show d-block" tabIndex="-1" role="dialog" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header bg-success text-white">
+                <h5 className="modal-title">Change Password for {selectedUser?.username}</h5>
+                <button type="button" className="btn-close" onClick={() => setShowPasswordModal(false)} aria-label="Close"></button>
+              </div>
+              <div className="modal-body">
+                {passwordSuccess && (
+                  <div className="alert alert-success">{passwordSuccess}</div>
+                )}
+                {passwordError && (
+                  <div className="alert alert-danger">{passwordError}</div>
+                )}
+                <form onSubmit={handlePasswordChange}>
+                  <div className="mb-3">
+                    <label htmlFor="newPassword" className="form-label">New Password</label>
+                    <input
+                      type="password"
+                      className="form-control"
+                      id="newPassword"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label htmlFor="confirmPassword" className="form-label">Confirm Password</label>
+                    <input
+                      type="password"
+                      className="form-control"
+                      id="confirmPassword"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className="d-flex justify-content-end">
+                    <button type="button" className="btn btn-secondary me-2" onClick={() => setShowPasswordModal(false)}>
+                      Cancel
+                    </button>
+                    <button type="submit" className="btn btn-success">
+                      Change Password
+                    </button>
+                  </div>
+                </form>
               </div>
             </div>
           </div>

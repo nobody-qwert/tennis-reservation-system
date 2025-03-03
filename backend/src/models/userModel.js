@@ -36,9 +36,29 @@ const getUserById = async (id) => {
   return rows[0];
 };
 
+// Get user with password (for password verification)
+const getUserWithPasswordById = async (id) => {
+  const { rows } = await db.query(
+    'SELECT id, username, email, password, is_admin FROM users WHERE id = $1',
+    [id]
+  );
+  return rows[0];
+};
+
+// Update user password
+const updatePassword = async (id, hashedPassword) => {
+  const { rowCount } = await db.query(
+    'UPDATE users SET password = $1 WHERE id = $2',
+    [hashedPassword, id]
+  );
+  return rowCount > 0;
+};
+
 module.exports = {
   createUser,
   getUserByUsername,
   getUserByEmail,
   getUserById,
+  getUserWithPasswordById,
+  updatePassword,
 };

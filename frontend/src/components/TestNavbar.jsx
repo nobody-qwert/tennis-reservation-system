@@ -2,39 +2,45 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useEffect, useRef, useState } from 'react';
 
-const Navbar = () => {
+console.log('TestNavbar module loaded');
+
+const TestNavbar = () => {
+  console.log('TestNavbar component rendering');
+
   const { user, logout, isAdmin, loading } = useAuth();
   const navigate = useNavigate();
+
+  console.log('TestNavbar initial props:', { user, loading, isAdmin: isAdmin?.() });
 
   // Track dropdown state
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
   // Debug console logs
-  console.log('=== Navbar Component State ===');
+  console.log('=== TestNavbar Component State ===');
   console.log('User:', user);
   console.log('Dropdown open:', dropdownOpen);
   console.log('Dropdown ref exists:', !!dropdownRef.current);
 
   // Close dropdown if user clicks outside
   useEffect(() => {
+    console.log('Setting up TestNavbar click outside listener');
     function handleClickOutside(e) {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         console.log('Click outside detected - closing dropdown');
         setDropdownOpen(false);
       }
     }
-    console.log('Setting up click outside listener');
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      console.log('Removing click outside listener');
+      console.log('Cleaning up TestNavbar click outside listener');
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
 
   // Toggle dropdown function
   const toggleDropdown = (e) => {
-    console.log('Toggle dropdown clicked');
+    console.log('TestNavbar toggle dropdown clicked');
     console.log('Current state:', dropdownOpen);
     console.log('Target:', e.target);
     setDropdownOpen(!dropdownOpen);
@@ -43,7 +49,7 @@ const Navbar = () => {
   };
 
   const handleLogout = () => {
-    console.log('Logout clicked');
+    console.log('TestNavbar logout clicked');
     logout();
     navigate('/login');
   };
@@ -104,37 +110,20 @@ const Navbar = () => {
                 <li className="nav-item dropdown" ref={dropdownRef}>
                   <button
                     type="button"
-                    className="nav-link dropdown-toggle"
+                    className="nav-link dropdown-toggle user-dropdown-btn"
                     aria-expanded={dropdownOpen}
                     aria-haspopup="true"
                     aria-controls="userDropdown"
-                    style={{
-                      backgroundColor: '#ff0000',
-                      border: 'none',
-                      cursor: 'pointer',
-                      padding: '8px 12px',
-                      borderRadius: '4px',
-                      fontWeight: 'bold',
-                      color: 'white',
-                      transition: 'all 0.2s ease-in-out',
-                      outline: 'none',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-                      margin: 0,
-                      textDecoration: 'none'
-                    }}
-                    onMouseEnter={() => console.log('=== Hover START: User button hovered ===')}
-                    onMouseLeave={() => console.log('=== Hover END: User button mouse leave ===')}
+                    onMouseEnter={() => console.log('=== TestNavbar Hover START: User button hovered ===')}
+                    onMouseLeave={() => console.log('=== TestNavbar Hover END: User button mouse leave ===')}
                     onClick={(e) => {
                       e.stopPropagation();
-                      console.log('=== CLICK START ===');
+                      console.log('=== TestNavbar CLICK START ===');
                       console.log('Button clicked at:', new Date().toLocaleTimeString());
                       console.log('Event target:', e.target.textContent);
                       console.log('Current dropdown state:', dropdownOpen ? 'OPEN' : 'CLOSED');
                       toggleDropdown(e);
-                      console.log('=== CLICK END ===');
+                      console.log('=== TestNavbar CLICK END ===');
                     }}
                   >
                     👤 {user.username || 'User'}
@@ -142,32 +131,12 @@ const Navbar = () => {
                   <ul
                     id="userDropdown"
                     role="menu"
-                    className="dropdown-menu dropdown-menu-end"
-                    style={{ 
-                      display: dropdownOpen ? 'block' : 'none',
-                      position: 'absolute',
-                      zIndex: 1000,
-                      backgroundColor: 'white',
-                      boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
-                      borderRadius: '4px',
-                      padding: '8px 0',
-                      minWidth: '200px',
-                      marginTop: '4px',
-                      right: 0
-                    }}
+                    className={`dropdown-menu dropdown-menu-end user-dropdown-menu ${dropdownOpen ? 'show' : ''}`}
                   >
                     <li>
                       <Link 
                         className="dropdown-item" 
                         to="/profile"
-                        style={{
-                          padding: '8px 16px',
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '8px',
-                          color: '#333',
-                          textDecoration: 'none'
-                        }}
                       >
                         <span>👤</span> My Profile
                       </Link>
@@ -175,15 +144,7 @@ const Navbar = () => {
                     <li>
                       <Link 
                         className="dropdown-item" 
-                        to="/profile"
-                        style={{
-                          padding: '8px 16px',
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '8px',
-                          color: '#333',
-                          textDecoration: 'none'
-                        }}
+                        to="/change-password"
                       >
                         <span>🔑</span> Change Password
                       </Link>
@@ -195,17 +156,6 @@ const Navbar = () => {
                       <button 
                         className="dropdown-item" 
                         onClick={handleLogout}
-                        style={{
-                          padding: '8px 16px',
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '8px',
-                          color: '#333',
-                          width: '100%',
-                          border: 'none',
-                          background: 'none',
-                          cursor: 'pointer'
-                        }}
                       >
                         <span>🚪</span> Logout
                       </button>
@@ -234,4 +184,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default TestNavbar;

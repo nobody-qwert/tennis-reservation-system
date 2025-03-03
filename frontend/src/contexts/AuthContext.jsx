@@ -15,8 +15,11 @@ export const AuthProvider = ({ children }) => {
     const checkLoggedIn = async () => {
       try {
         const token = localStorage.getItem('token');
+        console.log('Checking token:', token); // Debug log
+        
         if (token) {
           const userData = await authAPI.getProfile();
+          console.log('User data from profile:', userData); // Debug log
           setUser(userData);
         }
       } catch (err) {
@@ -35,12 +38,14 @@ export const AuthProvider = ({ children }) => {
     try {
       setError(null);
       const data = await authAPI.login(username, password);
+      console.log('Login response:', data); // Debug log
       
       // Store the token in localStorage
       localStorage.setItem('token', data.token);
       setUser(data);
       return data;
     } catch (err) {
+      console.error('Login error:', err); // Debug log
       setError(err.response?.data?.message || 'Login failed');
       throw err;
     }
@@ -51,12 +56,14 @@ export const AuthProvider = ({ children }) => {
     try {
       setError(null);
       const data = await authAPI.register(username, email, password);
+      console.log('Register response:', data); // Debug log
       
       // Store the token in localStorage
       localStorage.setItem('token', data.token);
       setUser(data);
       return data;
     } catch (err) {
+      console.error('Register error:', err); // Debug log
       setError(err.response?.data?.message || 'Registration failed');
       throw err;
     }
@@ -73,6 +80,28 @@ export const AuthProvider = ({ children }) => {
     return user && user.isAdmin;
   };
 
+    // Change password function
+  const changePassword = async (currentPassword, newPassword) => {
+    try {
+      setError(null);
+      return await authAPI.changePassword(currentPassword, newPassword);
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to change password');
+      throw err;
+    }
+  };
+
+  // Admin change user password function
+  const adminChangeUserPassword = async (userId, newPassword) => {
+    try {
+      setError(null);
+      return await authAPI.adminChangeUserPassword(userId, newPassword);
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to change user password');
+      throw err;
+    }
+  };
+
   const value = {
     user,
     loading,
@@ -80,7 +109,9 @@ export const AuthProvider = ({ children }) => {
     login,
     register,
     logout,
-    isAdmin
+    isAdmin,
+    changePassword,
+    adminChangeUserPassword
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

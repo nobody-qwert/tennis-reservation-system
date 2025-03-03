@@ -2,7 +2,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 
 // Components
-import Navbar from './components/Navbar';
+import TestNavbar from './components/TestNavbar';
 
 // Pages
 import Home from './pages/Home';
@@ -11,6 +11,8 @@ import Register from './pages/Register';
 import BookCourt from './pages/BookCourt';
 import MyReservations from './pages/MyReservations';
 import Admin from './pages/Admin';
+import Profile from './pages/Profile';
+import ChangePasswordForm from './pages/ChangePasswordForm';
 import { useAuth } from './contexts/AuthContext';
 
 // Protected route component
@@ -47,7 +49,10 @@ function App() {
   return (
     <AuthProvider>
       <div className="d-flex flex-column min-vh-100">
-        <Navbar />
+        <div>
+          <p style={{ color: 'red', fontWeight: 'bold', textAlign: 'center', margin: '5px 0', fontSize: '18px' }}>Testing NAVBAR</p>
+          <TestNavbar />
+        </div>
         <main className="flex-grow-1">
           <Routes>
             <Route path="/" element={<Home />} />
@@ -70,6 +75,22 @@ function App() {
               } 
             />
             <Route 
+              path="/profile" 
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/change-password" 
+              element={
+                <ProtectedRoute>
+                  <ChangePasswordForm />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
               path="/admin" 
               element={
                 <AdminRoute>
@@ -81,7 +102,7 @@ function App() {
         </main>
         <footer className="bg-light py-3 text-center mt-auto">
           <div className="container">
-            <p className="mb-0">Tennis Court Reservation System © {new Date().getFullYear()}</p>
+            <p className="mb-0">Tennis Court Reservation System© {new Date().getFullYear()}</p>
           </div>
         </footer>
       </div>
