@@ -49,11 +49,11 @@ const AdminRoute = ({ children }) => {
 function App() {
   return (
     <AuthProvider>
-      <div className="d-flex flex-column min-vh-100">
-        <div>
+      <div className="d-flex flex-column min-vh-100 w-100">
+        <header className="w-100">
           <Navbar />
-        </div>
-        <main className="flex-grow-1">
+        </header>
+        <main className="flex-grow-1 w-100">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
@@ -108,7 +108,7 @@ function App() {
             />
           </Routes>
         </main>
-        <footer className="bg-light py-3 text-center mt-auto">
+        <footer className="bg-light py-3 text-center mt-auto w-100">
           <div className="container">
             <p className="mb-0">Tennis Court Reservation System© {new Date().getFullYear()}</p>
           </div>

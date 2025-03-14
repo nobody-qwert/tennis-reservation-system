@@ -41,7 +41,7 @@ const Profile = () => {
   };
 
   return (
-    <div className="container mt-5">
+    <div className="container mt-5 px-3">
       <div className="row justify-content-center">
         <div className="col-md-8 col-lg-6">
           <div className="card">

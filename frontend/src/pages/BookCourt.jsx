@@ -126,7 +126,7 @@ const BookCourt = () => {
   const maxDateString = maxDate.toISOString().split('T')[0];
 
   return (
-    <div className="container mt-5">
+    <div className="container mt-5 px-3">
       <h2 className="mb-4">Book a Tennis Court</h2>
       
       {error && <div className="alert alert-danger">{error}</div>}

@@ -5,7 +5,7 @@ const Home = () => {
   const { user } = useAuth();
 
   return (
-    <div className="container mt-5">
+    <div className="container mt-5 px-3">
       <div className="jumbotron bg-light p-5 rounded">
         <h1 className="display-4">Welcome to Tennis Court Reservation</h1>
         <p className="lead">

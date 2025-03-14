@@ -186,7 +186,7 @@ const Admin = () => {
   };
 
   return (
-    <div className="container mt-5">
+    <div className="container mt-5 px-3">
       <h2 className="mb-4">Admin Dashboard</h2>
       
       {error && <div className="alert alert-danger">{error}</div>}

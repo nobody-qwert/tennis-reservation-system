@@ -49,7 +49,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-success">
+    <nav className="navbar navbar-expand-lg navbar-dark bg-success w-100">
       <div className="container">
         <Link className="navbar-brand" to="/">
           Tennis Court Reservation
