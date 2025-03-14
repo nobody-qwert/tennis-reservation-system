@@ -2,7 +2,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 
 // Components
-import TestNavbar from './components/TestNavbar';
+import Navbar from './components/Navbar';
 
 // Pages
 import Home from './pages/Home';
@@ -50,8 +50,7 @@ function App() {
     <AuthProvider>
       <div className="d-flex flex-column min-vh-100">
         <div>
-          <p style={{ color: 'red', fontWeight: 'bold', textAlign: 'center', margin: '5px 0', fontSize: '18px' }}>Testing NAVBAR</p>
-          <TestNavbar />
+          <Navbar />
         </div>
         <main className="flex-grow-1">
           <Routes>
