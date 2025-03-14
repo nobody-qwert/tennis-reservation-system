@@ -11,6 +11,7 @@ import Register from './pages/Register';
 import BookCourt from './pages/BookCourt';
 import MyReservations from './pages/MyReservations';
 import Admin from './pages/Admin';
+import AllReservations from './pages/AllReservations';
 import Profile from './pages/Profile';
 import ChangePasswordForm from './pages/ChangePasswordForm';
 import { useAuth } from './contexts/AuthContext';
@@ -94,6 +95,14 @@ function App() {
               element={
                 <AdminRoute>
                   <Admin />
+                </AdminRoute>
+              } 
+            />
+            <Route 
+              path="/all-reservations" 
+              element={
+                <AdminRoute>
+                  <AllReservations />
                 </AdminRoute>
               } 
             />

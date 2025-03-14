@@ -304,14 +304,13 @@ const Admin = () => {
                             )}
                           </td>
                           <td>
-                            {!isPast && (
-                              <button
-                                className="btn btn-sm btn-danger"
-                                onClick={() => handleCancelReservation(reservation.id)}
-                              >
-                                Cancel
-                              </button>
-                            )}
+                            <button
+                              className="btn btn-sm btn-danger"
+                              onClick={() => handleCancelReservation(reservation.id)}
+                              disabled={isPast}
+                            >
+                              Cancel
+                            </button>
                           </td>
                         </tr>
                       );
