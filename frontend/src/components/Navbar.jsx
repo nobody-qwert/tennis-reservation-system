@@ -116,7 +116,6 @@ const Navbar = () => {
                     aria-haspopup="true"
                     aria-controls="userDropdown"
                     style={{
-                      backgroundColor: '#ff0000',
                       border: 'none',
                       cursor: 'pointer',
                       padding: '8px 12px',
@@ -128,7 +127,6 @@ const Navbar = () => {
                       display: 'flex',
                       alignItems: 'center',
                       gap: '8px',
-                      boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
                       margin: 0,
                       textDecoration: 'none'
                     }}
