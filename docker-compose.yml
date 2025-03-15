@@ -38,6 +38,7 @@ services:
       - "5000:5000"
     volumes:
       - ./backend:/app
+      - backend_node_modules:/app/node_modules
     networks:
       - tennis-network
     command: npm run dev
@@ -59,11 +60,14 @@ services:
       - "5173:5173"
     volumes:
       - ./frontend:/app
+      - frontend_node_modules:/app/node_modules
     networks:
       - tennis-network
 
 volumes:
   postgres_data:
+  backend_node_modules:
+  frontend_node_modules:
 
 networks:
   tennis-network:
