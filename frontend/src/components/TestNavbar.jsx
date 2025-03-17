@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import useAuthStore from '../stores/useAuthStore';
 import { useEffect, useRef, useState } from 'react';
 
 console.log('TestNavbar module loaded');
@@ -7,7 +7,7 @@ console.log('TestNavbar module loaded');
 const TestNavbar = () => {
   console.log('TestNavbar component rendering');
 
-  const { user, logout, isAdmin, loading } = useAuth();
+  const { user, logout, isAdmin, loading } = useAuthStore();
   const navigate = useNavigate();
 
   console.log('TestNavbar initial props:', { user, loading, isAdmin: isAdmin?.() });

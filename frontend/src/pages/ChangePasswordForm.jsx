@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { useAuth } from '../contexts/AuthContext';
+import useAuthStore from '../stores/useAuthStore';
 
 const ChangePasswordForm = () => {
-  const { changePassword, error } = useAuth();
+  const { changePassword, error } = useAuthStore();
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');

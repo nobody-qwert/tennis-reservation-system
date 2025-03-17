@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { reservationAPI } from '../services/api';
-import { useAuth } from '../contexts/AuthContext';
+import useAuthStore from '../stores/useAuthStore';
 
 const AllReservations = () => {
   const [reservations, setReservations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   
-  const { isAdmin } = useAuth();
+  const { isAdmin } = useAuthStore();
   const navigate = useNavigate();
   
   // Check if user is admin

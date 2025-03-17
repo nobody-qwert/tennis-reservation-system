@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { reservationAPI, courtAPI, authAPI } from '../services/api';
-import { useAuth } from '../contexts/AuthContext';
+import useAuthStore from '../stores/useAuthStore';
 
 const Admin = () => {
   const [activeTab, setActiveTab] = useState('reservations');
@@ -25,7 +25,7 @@ const Admin = () => {
   const [passwordError, setPasswordError] = useState('');
   const [passwordSuccess, setPasswordSuccess] = useState('');
   
-  const { isAdmin, adminChangeUserPassword } = useAuth();
+  const { isAdmin, adminChangeUserPassword } = useAuthStore();
   const navigate = useNavigate();
   
   // Check if user is admin

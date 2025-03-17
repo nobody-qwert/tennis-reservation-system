@@ -1,9 +1,9 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import useAuthStore from '../stores/useAuthStore';
 import { useEffect, useRef, useState } from 'react';
 
 const Navbar = () => {
-  const { user, logout, isAdmin, loading } = useAuth();
+  const { user, logout, isAdmin, loading } = useAuthStore();
   const navigate = useNavigate();
 
   // Track dropdown state

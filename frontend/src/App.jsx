@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider } from './contexts/AuthContext';
+import { useEffect } from 'react';
+import useAuthStore from './stores/useAuthStore';
 
 // Components
 import Navbar from './components/Navbar';
@@ -14,11 +15,10 @@ import Admin from './pages/Admin';
 import AllReservations from './pages/AllReservations';
 import Profile from './pages/Profile';
 import ChangePasswordForm from './pages/ChangePasswordForm';
-import { useAuth } from './contexts/AuthContext';
 
 // Protected route component
 const ProtectedRoute = ({ children }) => {
-  const { user, loading } = useAuth();
+  const { user, loading } = useAuthStore();
   
   if (loading) {
     return <div className="text-center mt-5">Loading...</div>;
@@ -33,7 +33,7 @@ const ProtectedRoute = ({ children }) => {
 
 // Admin route component
 const AdminRoute = ({ children }) => {
-  const { user, loading, isAdmin } = useAuth();
+  const { user, loading, isAdmin } = useAuthStore();
   
   if (loading) {
     return <div className="text-center mt-5">Loading...</div>;
@@ -47,9 +47,15 @@ const AdminRoute = ({ children }) => {
 };
 
 function App() {
+  const { initialize } = useAuthStore();
+
+  // Initialize auth state on app load
+  useEffect(() => {
+    initialize();
+  }, [initialize]);
+
   return (
-    <AuthProvider>
-      <div className="d-flex flex-column min-vh-100 w-100">
+    <div className="d-flex flex-column min-vh-100 w-100">
         <header className="w-100">
           <Navbar />
         </header>
@@ -114,7 +120,6 @@ function App() {
           </div>
         </footer>
       </div>
-    </AuthProvider>
   );
 }
 

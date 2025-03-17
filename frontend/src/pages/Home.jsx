@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import useAuthStore from '../stores/useAuthStore';
 
 const Home = () => {
-  const { user } = useAuth();
+  const { user } = useAuthStore();
 
   return (
     <div className="container mt-5 px-3">
