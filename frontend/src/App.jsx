@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useAppLogic, useProtectedRouteLogic, useAdminRouteLogic } from './AppLogic';
 import useAuthStore from './stores/useAuthStore';
 
 // Components
@@ -47,12 +47,7 @@ const AdminRoute = ({ children }) => {
 };
 
 function App() {
-  const { initialize } = useAuthStore();
-
-  // Initialize auth state on app load
-  useEffect(() => {
-    initialize();
-  }, [initialize]);
+  const { currentYear } = useAppLogic();
 
   return (
     <div className="d-flex flex-column min-vh-100 w-100">
@@ -116,7 +111,7 @@ function App() {
         </main>
         <footer className="bg-light py-3 text-center mt-auto w-100">
           <div className="container">
-            <p className="mb-0">Tennis Court Reservation System© {new Date().getFullYear()}</p>
+            <p className="mb-0">Tennis Court Reservation System© {currentYear}</p>
           </div>
         </footer>
       </div>

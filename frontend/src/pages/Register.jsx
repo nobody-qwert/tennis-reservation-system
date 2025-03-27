@@ -1,40 +1,20 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import useAuthStore from '../stores/useAuthStore';
+import { Link } from 'react-router-dom';
+import { useRegisterLogic } from './RegisterLogic';
 
 const Register = () => {
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-  
-  const { register } = useAuthStore();
-  const navigate = useNavigate();
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    if (!username || !email || !password || !confirmPassword) {
-      return setError('Please enter all fields');
-    }
-    
-    if (password !== confirmPassword) {
-      return setError('Passwords do not match');
-    }
-
-    try {
-      setError('');
-      setLoading(true);
-      await register(username, email, password);
-      navigate('/');
-    } catch (err) {
-      setError(err.response?.data?.message || 'Failed to create an account');
-    } finally {
-      setLoading(false);
-    }
-  };
+  const {
+    username,
+    setUsername,
+    email,
+    setEmail,
+    password,
+    setPassword,
+    confirmPassword,
+    setConfirmPassword,
+    error,
+    loading,
+    handleSubmit
+  } = useRegisterLogic();
 
   return (
     <div className="container mt-5 px-3">

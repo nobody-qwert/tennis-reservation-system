@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
-import useAuthStore from '../stores/useAuthStore';
+import { useHomeLogic } from './HomeLogic';
 
 const Home = () => {
-  const { user } = useAuthStore();
+  const { user } = useHomeLogic();
 
   return (
     <div className="container mt-5 px-3">
